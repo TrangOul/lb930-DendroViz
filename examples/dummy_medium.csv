@@ -1,0 +1,32 @@
+id,parent,label,order
+root,,Knowledge,0
+science,root,Science,0
+arts,root,Arts,1
+technology,root,Technology,2
+biology,science,Biology,0
+physics,science,Physics,1
+chemistry,science,Chemistry,2
+music,arts,Music,0
+painting,arts,Painting,1
+literature,arts,Literature,2
+software,technology,Software,0
+hardware,technology,Hardware,1
+networks,technology,Networks,2
+genetics,biology,Genetics,0
+ecology,biology,Ecology,1
+mechanics,physics,Mechanics,0
+optics,physics,Optics,1
+organic,chemistry,Organic Chemistry,0
+inorganic,chemistry,Inorganic Chemistry,1
+jazz,music,Jazz,0
+classical,music,Classical,1
+oil,painting,Oil Painting,0
+watercolor,painting,Watercolor,1
+poetry,literature,Poetry,0
+novels,literature,Novels,1
+python,software,Python,0
+web,software,Web Development,1
+cpu,hardware,CPU Design,0
+sensors,hardware,Sensors,1
+lan,networks,LAN,0
+cloud,networks,Cloud,1

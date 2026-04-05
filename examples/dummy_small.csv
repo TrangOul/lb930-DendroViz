@@ -1,0 +1,12 @@
+id,parent,label,order
+root,,Life,0
+animals,root,Animals,0
+plants,root,Plants,1
+mammals,animals,Mammals,0
+birds,animals,Birds,1
+oak,plants,Oak,0
+rose,plants,Rose,1
+fox,mammals,Fox,0
+whale,mammals,Whale,1
+eagle,birds,Eagle,0
+sparrow,birds,Sparrow,1

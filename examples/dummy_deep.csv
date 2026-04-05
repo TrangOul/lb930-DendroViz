@@ -1,0 +1,40 @@
+id,parent,label,order
+root,,Company,0
+division_product,root,Product Division,0
+division_ops,root,Operations Division,1
+product_platform,division_product,Platform,0
+product_apps,division_product,Applications,1
+ops_people,division_ops,People Ops,0
+ops_finance,division_ops,Finance Ops,1
+platform_backend,product_platform,Backend,0
+platform_data,product_platform,Data,1
+apps_mobile,product_apps,Mobile,0
+apps_web,product_apps,Web,1
+people_recruiting,ops_people,Recruiting,0
+people_learning,ops_people,Learning,1
+finance_budgeting,ops_finance,Budgeting,0
+finance_reporting,ops_finance,Reporting,1
+backend_api,platform_backend,API Team,0
+backend_infra,platform_backend,Infra Team,1
+data_warehouse,platform_data,Warehouse Team,0
+data_ml,platform_data,ML Team,1
+mobile_ios,apps_mobile,iOS Squad,0
+mobile_android,apps_mobile,Android Squad,1
+web_frontend,apps_web,Frontend Squad,0
+web_design,apps_web,Design Systems,1
+recruiting_employer,people_recruiting,Employer Brand,0
+recruiting_sourcing,people_recruiting,Sourcing,1
+learning_onboarding,people_learning,Onboarding,0
+learning_growth,people_learning,Growth,1
+budgeting_forecast,finance_budgeting,Forecasting,0
+budgeting_controls,finance_budgeting,Controls,1
+reporting_internal,finance_reporting,Internal Reporting,0
+reporting_external,finance_reporting,External Reporting,1
+api_auth,backend_api,Auth Service,0
+api_billing,backend_api,Billing Service,1
+infra_kubernetes,backend_infra,Kubernetes,0
+infra_observability,backend_infra,Observability,1
+warehouse_etl,data_warehouse,ETL Pipelines,0
+warehouse_models,data_warehouse,Data Models,1
+ml_recommendation,data_ml,Recommendations,0
+ml_forecasting,data_ml,Forecasting Models,1
