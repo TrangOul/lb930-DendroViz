@@ -13,9 +13,8 @@ The package, CLI, and Python import path are all `dendroviz`.
 - [Installation](#installation)
 - [Quickstart](#quickstart)
 - [Input Format](#input-format)
-- [Leaf Labels](#leaf-labels)
 - [Colour Palettes](#colour-palettes)
-- [How Layout and Line Style Interact](#how-layout-and-line-style-interact)
+- [CLI Reference](#cli-reference)
 - [Development](#development)
 
 ## Examples
@@ -89,7 +88,8 @@ result = generator.generate_tree(
         label_orientation="auto",
         label_offset=24,
         color_mode="palette",
-        palette="scientific",
+        palette="set2",
+        palette_depth=2,
     ),
 )
 
@@ -109,20 +109,24 @@ dendroviz build examples/dummy_deep.csv \
   --label-orientation auto \
   --label-offset 24 \
   --color-mode palette \
-  --palette scientific
+  --palette set2 \
+  --palette-depth 2
 ```
 
 Example test runs:
 
 ```bash
-PYTHONPATH=src python3 -m dendroviz.cli build examples/dummy_small.csv \
+dendroviz build examples/dummy_small.csv \
   --tree-layout vertical \
   --line-style straight \
   --output-csv build/dummy-small-vertical-straight.csv \
   --output-svg build/dummy-small-vertical-straight.svg \
-  --show-labels
+  --show-labels \
+  --color-mode palette \
+  --palette set2 \
+  --palette-depth 2
 
-PYTHONPATH=src python3 -m dendroviz.cli build examples/dummy_small.csv \
+dendroviz build examples/dummy_small.csv \
   --tree-layout horizontal \
   --line-style curved \
   --output-csv build/dummy-small-horizontal-curved.csv \
@@ -130,11 +134,11 @@ PYTHONPATH=src python3 -m dendroviz.cli build examples/dummy_small.csv \
   --show-labels \
   --label-mode all \
   --label-offset 28 \
-  --edge-color '#1d4ed8' \
-  --node-color '#111827' \
-  --label-color '#047857'
+  --color-mode palette \
+  --palette set2 \
+  --palette-depth 2
 
-PYTHONPATH=src python3 -m dendroviz.cli build examples/dummy_deep.csv \
+dendroviz build examples/dummy_deep.csv \
   --tree-layout radial \
   --line-style split \
   --output-csv build/dummy-deep-radial-split.csv \
@@ -142,7 +146,8 @@ PYTHONPATH=src python3 -m dendroviz.cli build examples/dummy_deep.csv \
   --show-labels \
   --label-orientation auto \
   --color-mode palette \
-  --palette scientific
+  --palette set2 \
+  --palette-depth 2
 ```
 
 Try it with the included dummy data:
@@ -222,45 +227,45 @@ tree = generator.load_tree("examples/tree.nwk", input_format="newick")
 
 Sibling order is taken from the order children appear in the Newick file.
 
-## Leaf Labels
+## CLI Reference
 
-For a cleaner radial tree where internal nodes stay visible but only leaves get labels:
+### Mandatory
 
-```bash
-PYTHONPATH=src python3 -m dendroviz.cli build examples/dummy_deep.csv \
-  --tree-layout radial \
-  --line-style split \
-  --output-csv build/dummy-deep-radial-split.csv \
-  --output-svg build/dummy-deep-radial-split.svg \
-  --show-labels \
-  --label-mode leaves \
-  --label-orientation auto
-```
+| Option | Values | Notes |
+| --- | --- | --- |
+| `build` | subcommand | Generate dendrogram artifacts from an input tree |
+| input path | path | Path to the input tree file |
+| `--tree-layout` | `radial`, `vertical`, `horizontal` | `radial` uses angle/radius coordinates, `vertical` grows top-to-bottom, `horizontal` grows left-to-right |
+| `--line-style` | `curved`, `split`, `straight` | `curved` uses smooth splines, `split` branches at forks, `straight` uses direct segments |
+| output flag(s) | `--output-csv`, `--output-json`, `--output-svg` | Write one or more render artifacts |
 
-To keep the root visible while showing only leaf labels, do nothing extra because the root stays visible by default.
-To hide the root marker too, add:
+### Optional
 
-```bash
-  --hide-root-node
-```
+These CLI flags map directly to `LayoutOptions` fields in the Python API.
 
-To align radial leaf labels outside the tree with automatic flipping on the left side, add:
-
-```bash
-  --label-orientation auto
-```
-
-You can push labels farther outward with:
-
-```bash
-  --label-offset 24
-```
-
-You can also increase label size with:
-
-```bash
-  --font-size 18
-```
+| Option | Values | Notes |
+| --- | --- | --- |
+| `--log-level` | `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` | Controls CLI verbosity |
+| `--show-labels` | flag | Enables SVG labels |
+| `--label-mode` | `all`, `leaves`, `none` | `leaves` shows labels only on leaf nodes; `none` hides all labels |
+| `--label-orientation` | `horizontal`, `auto` | `auto` flips radial labels to stay readable on the left side |
+| `--label-offset` | number | Pushes labels farther from the tree |
+| `--font-size` | number | Controls label size |
+| `--hide-internal-nodes` | flag | Hides non-leaf node markers |
+| `--hide-root-node` | flag | Hides the root node marker |
+| `--color-mode` | `global`, `palette` | Controls whether palette coloring is used |
+| `--palette` | preset name or hex colors | Used only when `--color-mode palette` is active |
+| `--palette-depth` | `1`, `2`, ... | Used only when `--color-mode palette` is active; chooses which tree level gets palette coloring |
+| `--node-color` | hex color | Fallback node color in global mode |
+| `--edge-color` | hex color | Fallback edge color in global mode |
+| `--label-color` | hex color | Fallback label color in global mode |
+| `--depth-spacing` | number | Adjusts the gap between tree levels |
+| `--sibling-spacing` | number | Adjusts the gap between siblings |
+| `--curve-points` | number | Controls curved path smoothness |
+| `--straight-points` | number | Controls how many points are used for straight paths |
+| `--radial-base-angle-deg` | number | Sets the starting angle for radial layouts |
+| `--radial-sweep-deg` | number | Sets the angular sweep for radial layouts |
+| `--scale` | number | Enlarges SVG geometry, strokes, nodes, and text without changing the tree structure |
 
 ## Colour Palettes
 
@@ -274,21 +279,6 @@ Custom palettes are also supported:
 - Hex colors are validated before export, so invalid values fail fast
 
 ### Built-In Palettes
-
-You can also set SVG colors globally:
-
-```bash
-  --edge-color '#334155' \
-  --node-color '#0f172a' \
-  --label-color '#7c2d12'
-```
-
-Or let the library color each top-level branch automatically:
-
-```bash
-  --color-mode palette \
-  --palette scientific
-```
 
 <table>
   <tr>
@@ -449,23 +439,6 @@ Or let the library color each top-level branch automatically:
     <td><code>#e69f00 #56b4e9 #009e73 #f0e442 #0072b2 #d55e00 #cc79a7 #000000</code></td>
   </tr>
 </table>
-
-## How layout and line style interact
-
-- `radial` layout arranges nodes by angle and radius
-- `vertical` layout grows top-to-bottom
-- `horizontal` layout grows left-to-right
-- `curved` line style uses smooth cubic curves
-- `split` line style uses branched orthogonal or radial split paths
-- `straight` line style uses direct line segments
-
-## SVG Options
-
-`--scale` enlarges the generated SVG geometry, strokes, nodes, and text without changing the tree structure. It is convenient for quick previews or docs, but you can also resize the SVG later in Inkscape or another vector editor.
-
-```bash
-  --scale 2
-```
 
 ## Development
 
